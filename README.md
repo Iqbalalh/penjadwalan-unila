@@ -19,6 +19,7 @@ This project is a **Schedule Management System** built with **React.js**, **Tail
 - **PostgreSQL**: For the database.
 - **Prisma**: For the database ORM.
 
+
 Author:
 - Iqbal Al Hafidzu Rahman
 
