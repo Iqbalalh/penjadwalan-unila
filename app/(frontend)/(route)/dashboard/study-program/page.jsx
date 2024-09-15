@@ -1,46 +1,36 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  message,
-  Button,
-  Input,
-  Form,
-  Row,
-  Col,
-  Select,
-  Spin,
-} from "antd";
+import { Table, message, Button, Input, Form, Select, Spin, Modal } from "antd";
 import axios from "axios";
 import {
-  API_LECTURER,
+  API_STUDY_PROGRAM,
   API_FACULTY,
   API_DEPARTMENT_BY_FACULTY,
-  API_LECTURER_BY_ID,
+  API_STUDY_PROGRAM_BY_ID,
   API_DEPARTMENT,
 } from "@/app/(backend)/lib/endpoint";
 import PostModal from "@/app/(frontend)/(component)/PostModal";
 import PatchModal from "@/app/(frontend)/(component)/PatchModal";
 
-const Lecturer = () => {
+const StudyProgram = () => {
   const [datas, setDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [dep, setDep] = useState(null);
-  const [departments, setDepartments] = useState(null);
   const [faculty, setFaculty] = useState(null);
+  const [departments, setDepartments] = useState(null);
   const [faculties, setFaculties] = useState([]);
   const [depLoading, setDepLoading] = useState(false);
   const [facultyLoading, setFacultyLoading] = useState(false);
-  const [currentLecturer, setCurrentLecturer] = useState(null);
+  const [currentStudyProgram, setCurrentStudyProgram] = useState(null);
 
-  // Fetch lecturers
+  // Fetch study programs
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(API_LECTURER);
+      const response = await axios.get(API_STUDY_PROGRAM);
       setDatas(response.data);
       try {
         const response = await axios.get(API_DEPARTMENT);
@@ -52,13 +42,13 @@ const Lecturer = () => {
         );
         setIsLoading(false);
       } catch (error) {
-        message.error("Failed to load lecturers data!");
+        message.error("Failed to load data!");
         setIsLoading(false);
       }
       setIsLoading(false);
       setIsDisabled(false);
     } catch (error) {
-      message.error("Failed to load lecturers data!");
+      message.error("Failed to load data!");
       setIsLoading(false);
     }
   };
@@ -87,7 +77,7 @@ const Lecturer = () => {
       const response = await axios.get(API_FACULTY);
       const faculties = response.data.map((fac) => ({
         value: fac.id,
-        label: fac.lecturerName,
+        label: fac.facultyName,
       }));
       setFaculties(faculties);
       setFacultyLoading(false);
@@ -111,69 +101,65 @@ const Lecturer = () => {
 
   const postData = async (values) => {
     const data = {
-      lecturerName: values.lecturerName,
-      lecturerNIP: values.lecturerNIP,
-      lecturerEmail: values.lecturerEmail,
+      studyProgramName: values.studyProgramName,
       idDepartment: values.idDepartment,
     };
 
-    const response = await axios.post(API_LECTURER, data, {
+    const response = await axios.post(API_STUDY_PROGRAM, data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
 
     if (response.status !== 201) {
-      throw new Error("Failed to add lecturer");
+      throw new Error("Failed to add study program");
     }
     handleSuccess();
   };
 
-  const patchLecturerData = async (values) => {
+  const patchStudyProgramData = async (values) => {
     const data = {
-      lecturerName: values.lecturerName,
-      lecturerNIP: values.lecturerNIP,
-      lecturerEmail: values.lecturerEmail,
+      studyProgramName: values.studyProgramName,
       idDepartment: values.idDepartment,
     };
 
     const response = await axios.put(
-      API_LECTURER_BY_ID(currentLecturer?.id),
+      API_STUDY_PROGRAM_BY_ID(currentStudyProgram?.id),
       data
     );
     if (response.status !== 200) {
-      throw new Error("Gagal memperbarui data");
+      throw new Error("Failed to update data");
     }
     handleSuccess();
   };
 
   const handleEdit = (record) => {
-    setCurrentLecturer(record);
+    setCurrentStudyProgram(record);
     setIsEditOpen(true);
   };
 
-  const deleteLecturerData = async (id) => {
+  const deleteStudyProgramData = async (id) => {
     try {
-      const response = await axios.delete(API_LECTURER_BY_ID(id));
+      const response = await axios.delete(API_STUDY_PROGRAM_BY_ID(id));
       if (response.status !== 200) {
-        throw new Error("Gagal menghapus data");
+        throw new Error("Failed to delete data");
       }
-      message.success("Data berhasil dihapus!");
+      message.success("Data successfully deleted!");
       handleSuccess();
     } catch (error) {
-      message.error(error.message || "Gagal menghapus data");
+      message.error(error.message || "Failed to delete data");
     }
   };
 
-  // Handle delete modal
+  // Handle delete confirmation
   const handleDelete = (id) => {
     Modal.confirm({
-      title: "Apakah Anda yakin ingin menghapus data ini?",
-      content: "Tindakan ini tidak dapat dibatalkan.",
-      okText: "Ya, Hapus",
+      title: "Are you sure you want to delete this data?",
+      content: "This action cannot be undone.",
+      okText: "Yes, Delete",
       okType: "danger",
-      cancelText: "Batal",
-      onOk: () => deleteLecturerData(id),
+      cancelText: "Cancel",
+      onOk: () => deleteStudyProgramData(id),
     });
   };
 
@@ -184,19 +170,9 @@ const Lecturer = () => {
       render: (text, record, index) => index + 1 + ".",
     },
     {
-      title: "Nama",
-      dataIndex: "lecturerName",
-      key: "lecturerName",
-    },
-    {
-      title: "NIP",
-      dataIndex: "lecturerNIP",
-      key: "lecturerNIP",
-    },
-    {
-      title: "Email",
-      dataIndex: "lecturerEmail",
-      key: "lecturerEmail",
+      title: "Program Studi",
+      dataIndex: "studyProgramName",
+      key: "studyProgramName",
     },
     {
       title: "Jurusan",
@@ -239,9 +215,7 @@ const Lecturer = () => {
               type="text"
               disabled={isDisabled}
               className="text-blue-500 font-semibold"
-              onClick={() => {
-                handleEdit(record);
-              }}
+              onClick={() => handleEdit(record)}
             >
               Edit
             </Button>
@@ -249,9 +223,7 @@ const Lecturer = () => {
               type="text"
               disabled={isDisabled}
               className="text-red-600 font-semibold"
-              onClick={() => {
-                handleDelete(record.id);
-              }}
+              onClick={() => handleDelete(record.id)}
             >
               Delete
             </Button>
@@ -266,7 +238,7 @@ const Lecturer = () => {
       <div>
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold mb-4 flex">
-            <div className="bg-blue-500 px-1 mr-2">&nbsp;</div>Dosen Pengajar
+            <div className="bg-blue-500 px-1 mr-2">&nbsp;</div>Program Studi
           </h1>
         </div>
 
@@ -281,57 +253,22 @@ const Lecturer = () => {
       </div>
 
       <PostModal
-        postApi={API_LECTURER}
+        postApi={API_STUDY_PROGRAM}
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
         postPayload={postData}
-        title="Tambah Dosen"
+        title="Tambah Program Studi"
       >
         <Form.Item
-          label="Nama Lengkap"
+          label="Program Studi"
           className="mb-2"
-          name="lecturerName"
+          name="studyProgramName"
           rules={[{ required: true, message: "Harus diisi!" }]}
         >
-          <Input placeholder="cth. Iqbal Alhafidzu" />
+          <Input placeholder="cth. S1 Ilmu Komputer" />
         </Form.Item>
-        <Row gutter={20}>
-          <Col span={12}>
-            <Form.Item
-              label="NIP"
-              className="mb-2"
-              name="lecturerNIP"
-              rules={[
-                { required: true, message: "Harus diisi!" },
-                {
-                  max: 18,
-                  message: "Maksimal 18 karakter!",
-                },
-                {
-                  min: 17,
-                  message: "Format belum sesuai!",
-                },
-              ]}
-            >
-              <Input type="number" placeholder="cth. 20241212202412224" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Email"
-              className="mb-2"
-              name="lecturerEmail"
-              rules={[
-                { required: true, message: "Harus diisi!" },
-                { type: "email", message: "Format tidak sesuai!" },
-              ]}
-            >
-              <Input placeholder="cth. iqbal@fmipa.ac.id" />
-            </Form.Item>
-          </Col>
-        </Row>
         <Form.Item
-          label="Data"
+          label="Fakultas"
           className="mb-2"
           name="idFaculty"
           rules={[{ required: true, message: "Harus diisi!" }]}
@@ -346,12 +283,12 @@ const Lecturer = () => {
             loading={facultyLoading}
             onDropdownVisibleChange={(open) => {
               if (open && faculties.length === 0) {
-                fetchFaculty(); // Fetch faculties when the dropdown is opened for the first time
+                fetchFaculty();
               }
             }}
             onSelect={(value) => {
-              setFaculty(value); // Set the selected faculty
-              fetchDepartments(value); // Fetch departments based on the selected faculty ID
+              setFaculty(value);
+              fetchDepartments(value);
             }}
             notFoundContent={facultyLoading ? <Spin size="small" /> : null}
           />
@@ -366,15 +303,13 @@ const Lecturer = () => {
             showSearch
             disabled={!faculty}
             placeholder={
-              !faculty ? "Pilih Data terlebih dahulu" : "Pilih salah satu"
+              !faculty ? "Pilih fakultas terlebih dahulu" : "Pilih salah satu"
             }
             filterOption={(input, option) =>
               (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
             }
             options={dep}
-            notFoundContent={
-              depLoading ? <Spin size="small" /> : "Tidak ada data!"
-            }
+            notFoundContent={depLoading ? <Spin size="small" /> : null}
           />
         </Form.Item>
       </PostModal>
@@ -382,53 +317,18 @@ const Lecturer = () => {
       <PatchModal
         isEditOpen={isEditOpen}
         setIsEditOpen={setIsEditOpen}
-        patchPayload={patchLecturerData}
+        patchPayload={patchStudyProgramData}
         title="Edit Data"
-        initValue={currentLecturer}
+        initValue={currentStudyProgram}
       >
         <Form.Item
-          label="Nama Lengkap"
+          label="Program Studi"
           className="mb-2"
-          name="lecturerName"
+          name="studyProgramName"
           rules={[{ required: true, message: "Harus diisi!" }]}
         >
-          <Input placeholder="cth. Iqbal Alhafidzu" />
+          <Input placeholder="cth. S1 Ilmu Komputer" />
         </Form.Item>
-        <Row gutter={20}>
-          <Col span={12}>
-            <Form.Item
-              label="NIP"
-              className="mb-2"
-              name="lecturerNIP"
-              rules={[
-                { required: true, type: "number", message: "Harus diisi!" },
-                {
-                  max: 18,
-                  message: "Maksimal 18 karakter!",
-                },
-                {
-                  min: 17,
-                  message: "Format belum sesuai!",
-                },
-              ]}
-            >
-              <Input placeholder="cth. 20241212202412224" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Email"
-              className="mb-2"
-              name="lecturerEmail"
-              rules={[
-                { required: true, message: "Harus diisi!" },
-                { type: "email", message: "Format tidak sesuai!" },
-              ]}
-            >
-              <Input placeholder="cth. iqbal@fmipa.ac.id" />
-            </Form.Item>
-          </Col>
-        </Row>
         <Form.Item
           label="Jurusan"
           className="mb-2"
@@ -451,4 +351,4 @@ const Lecturer = () => {
   );
 };
 
-export default Lecturer;
+export default StudyProgram;
