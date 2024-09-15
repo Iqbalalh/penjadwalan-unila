@@ -243,33 +243,33 @@ const Room = () => {
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
         postPayload={postData}
-        title="Add Room"
+        title="Tambah Ruangan"
       >
         <Form.Item
-          label="Room Name"
+          label="RUangan"
           className="mb-2"
           name="roomName"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Input placeholder="e.g. Room 101" />
         </Form.Item>
         <Form.Item
-          label="Capacity"
+          label="Kapasitas"
           className="mb-2"
           name="roomCapacity"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Input type="number" placeholder="e.g. 30" />
         </Form.Item>
         <Form.Item
-          label="Department"
+          label="Jurusan"
           className="mb-2"
           name="idDepartment"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Select
             showSearch
-            placeholder="Select department"
+            placeholder="Pilih salah satu!"
             filterOption={(input, option) =>
               (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
             }
@@ -277,13 +277,13 @@ const Room = () => {
           />
         </Form.Item>
         <Form.Item
-          label="Course Type"
+          label="Tipe Ruangan"
           className="mb-2"
           name="courseType"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Select
-            placeholder="Select course type"
+            placeholder="Pilih salah satu!"
             options={[
               { value: "Teori", label: "Teori" },
               { value: "Praktikum", label: "Praktikum" },
@@ -301,26 +301,26 @@ const Room = () => {
         initValue={currentRoom}
       >
         <Form.Item
-          label="Room Name"
+          label="RUangan"
           className="mb-2"
           name="roomName"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Input placeholder="e.g. Room 101" />
         </Form.Item>
         <Form.Item
-          label="Capacity"
+          label="Kapasitas"
           className="mb-2"
           name="roomCapacity"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Input type="number" placeholder="e.g. 30" />
         </Form.Item>
         <Form.Item
-          label="Department"
+          label="Jurusan"
           className="mb-2"
           name="idDepartment"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Select
             showSearch
@@ -331,10 +331,10 @@ const Room = () => {
           />
         </Form.Item>
         <Form.Item
-          label="Course Type"
+          label="Tipe Ruangan"
           className="mb-2"
           name="courseType"
-          rules={[{ required: true, message: "Required!" }]}
+          rules={[{ required: true, message: "Harus diisi!" }]}
         >
           <Select
             placeholder="Select course type"
