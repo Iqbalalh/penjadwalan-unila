@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import '../(css)/globals.css';
 import NextTopLoader from "nextjs-toploader";
 const inter = Inter({ subsets: ["latin"] });
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata = {
   title: "Penjadwalan",
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head><link rel="icon" href="/hero-banner.svg" sizes="any" /></head>
       <body className={inter.className}>
+        <SpeedInsights />
         <NextTopLoader showSpinner={false} />
         {children}
       </body>
