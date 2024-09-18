@@ -1,6 +1,6 @@
 {
-  "name": "Penjadwalan Unila",
-  "version": "0.1.0",
+  "name": "penjadwalan-unila",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "dev": "next dev",

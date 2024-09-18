@@ -129,7 +129,7 @@ const Room = () => {
       content: "Tindakan ini tidak dapat dibatalkan!",
       okText: "Yes, Hapus",
       okType: "danger",
-      cancelText: "Cancel",
+      cancelText: "Batalkan",
       onOk: () => deleteRoomData(id),
     });
   };
@@ -138,6 +138,7 @@ const Room = () => {
     {
       title: "No.",
       key: "index",
+      width: 70,
       render: (text, record, index) => index + 1 + ".",
     },
     {
@@ -147,6 +148,7 @@ const Room = () => {
     },
     {
       title: "Kapasitas",
+      width: 100,
       dataIndex: "roomCapacity",
       key: "roomCapacity",
     },
@@ -235,6 +237,8 @@ const Room = () => {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 10 }}
+          scroll={{ x: "max-content", y: 800 }}
+
         />
       </div>
 
@@ -301,7 +305,7 @@ const Room = () => {
         initValue={currentRoom}
       >
         <Form.Item
-          label="RUangan"
+          label="Ruangan"
           className="mb-2"
           name="roomName"
           rules={[{ required: true, message: "Harus diisi!" }]}

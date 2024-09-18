@@ -12,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head><link rel="icon" href="/hero-banner.svg" sizes="any" /></head>
+      <head><link rel="icon" href="/logo-unila.png" sizes="any" /></head>
       <body className={inter.className}>
         <SpeedInsights />
         <NextTopLoader showSpinner={false} />
